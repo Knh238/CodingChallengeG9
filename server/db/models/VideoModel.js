@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
+const Sequelize = require('sequelize');
+const db = require('../db');
 
 const Video = db.define('video', {
   name: {
@@ -7,40 +7,75 @@ const Video = db.define('video', {
     allowNull: false
   },
   brand: {
-    type: Sequelize.STRING,
-    //array of one of these values
+    type: Sequelize.ENUM('NowThis', 'TheDodo', 'Thrillist', 'Seeker'),
     allowNull: false
   },
   storageReference: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  pimaryVideoCategory: {
+  primaryVideoCategory: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: true
   },
   keywords: {
-    type: Sequelize.STRING,
+    type: Sequelize.ARRAY(Sequelize.TEXT),
+    defaultValue: []
+  },
+  publishedDate: {
+    type: Sequelize.DATE,
     allowNull: false
   },
-  PublishedDate: {
-    type: Sequelize.STRING,
-    allowNull: false
+  totalViews: {
+    type: Sequelize.INTEGER,
+    defaultValue: 0
   },
-  TotalViews: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  ViewHistory: {
-    type: Sequelize.STRING,
-    allowNull: false
+  viewHistory: {
+    type: Sequelize.ARRAY(Sequelize.TEXT),
+    defaultValue: []
   }
-})
+});
 
-//add a method for calculating the views by date range
-//other properties :
-//runtime,
-//CurrentlyFeatured: platform name, date range
-//alternateURI
-
-module.exports = Video
+module.exports = Video;
+// const videoDetails = {
+//     name: 'titleSetBYYou',
+//     brand: '',
+//     storageReference: '',
+//     primaryVideoCategory: '',
+//     keywords: [],
+//     publishedDate: Date.now(),
+//     totalViews: 0,
+//     viewHistory: []
+//   };
+// const Video = db.define('video', {
+//   name: {
+//     type: Sequelize.STRING,
+//     allowNull: false
+//   },
+//   brand: {
+//     type: Sequelize.ENUM('NowThis', 'TheDodo', 'Thrillist', 'Seeker'),
+//     allowNull: false
+//   },
+//   storageReference: {
+//     type: Sequelize.STRING,
+//     allowNull: false
+//   },
+//   pimaryVideoCategory: {
+//     type: Sequelize.STRING
+//   },
+//   keywords: {
+//     type: Sequelize.ARRAY(Sequelize.TEXT)
+//   },
+//   publishedDate: {
+//     type: Sequelize.DATE,
+//     allowNull: false
+//   },
+//   totalViews: {
+//     type: Sequelize.INTEGER,
+//     defaultValue: 0
+//   },
+//   viewHistory: {
+//     type: Sequelize.ARRAY(Sequelize.TEXT),
+//     defaultValue: []
+//   }
+// });

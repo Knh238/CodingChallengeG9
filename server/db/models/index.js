@@ -1,21 +1,16 @@
 const Video = require('./VideoModel');
 const Keyword = require('./KeywordModel');
+const View = require('./ViewModel');
 
-//relations
-//brand
-//publishedDate
-//keywords
-
-//this would mean a keyword table
-//keyword -- videoes , number of views, brand
-
-//brand would have videos, number of views,
-
-//only necesarry if you want other response/reques types than the three listed
-
-//can just filter too
-
+Video.hasMany(View);
+// View.belongsTo(Video);
+// Video.hasMany(Keyword, { as: 'keywordId' });
+// Video.hasMany(View, { as: "viewId" });
+// Video.hasMany(View, { as: "viewHistory" });
+// Student.belongsTo(Campus);
+// Campus.hasMany(Student, { as: "campusId" });
 module.exports = {
   Video,
+  View,
   Keyword
 };
