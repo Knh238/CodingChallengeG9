@@ -9,7 +9,9 @@ import {
   CreateVideo,
   TrackVideo,
   VideoViews,
-  KeywordListing
+  KeywordListing,
+  LoginForm,
+  SignUpForm
 } from './components';
 
 export default class Routes extends Component {
@@ -17,6 +19,8 @@ export default class Routes extends Component {
     return (
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route exact path="/Login" component={LoginForm} />
+        <Route exact path="/Signup" component={SignUpForm} />
         <Route exact path="/AddVideo" component={CreateVideo} />
         <Route exact path="/Track" component={TrackVideo} />
         <Route exact path="/ViewHistory" component={VideoViews} />

@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import firebase from '../firebase';
 
 //gonna need to get all the views
 //then gonna need to map through to display below
@@ -21,19 +22,45 @@ import TextField from '@material-ui/core/TextField';
 export default class TrackVideo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { videoId: '', name: '', brand: '' };
+    this.state = { videoId: '', name: '', brand: '', allVideos: [] };
   }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        const allVideos = [];
+        const ref = firebase.database().ref('videos');
+        ref.on('value', function(snapshot) {
+          const videos = snapshot.val();
 
+          allVideos.push(videos);
+        });
+      }
+    });
+  }
   addView() {
     //user: Kristin
     console.log('miss vanjie!');
     // this.setState({ title: '' });
   }
-  listAllVideos() {
-    //user: Kristin
-    // console.log('miss vanjie!');
-    // this.setState({ title: '' });
-  }
+  // listAllVideos() {
+  //   const allVideos= this.state.allVideos
+  //  allVideos.map(vid => (
+  //    <Card>
+  //         <CardContent align="center">
+  //           <ReactPlayer
+  //             url="https://www.youtube.com/watch?v=2XID_W4neJo"
+  //             controls={true}
+  //             onStart={() => this.addView()}
+  //           />
+  //         </CardContent>
+  //         <CardContent align="center">
+  //         <Typography variant="h4" style={{ fontFamily: 'Signika', color: '#ef9a9a' }}>
+  //         name: vid.name: brand: vid.brand
+  //         </Typography>
+  //         </CardContent>
+  //         </Card>)
+  // }
+
   render() {
     return (
       <Paper style={{ height: 500 }}>

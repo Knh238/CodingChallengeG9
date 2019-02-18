@@ -11,6 +11,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { addNewVideo } from '../store/videos';
+import firebase from '../firebase';
+// const firebaseDB = firebase.database();
+
 const brands = [
   {
     value: 'Thrillist',
@@ -33,28 +37,83 @@ export default class CreateVideo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      name: '',
       brand: '',
-      storageReference: '',
-      primaryVideoCategory: '',
-      keywords: []
+      uri: '',
+      category: '',
+      user: ''
+      // keywords: []
     };
   }
+  componentDidMount() {
+    const self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        self.setState({ user: user.email });
+      } else {
+        self.setState({ user: '' });
+      }
+    });
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
     });
   };
-  handleSubmit() {
-    const input = this.state.title;
+  // addNewVideo = (name, brand, uri, category) => {
+  //   firebase.auth().onAuthStateChanged(function(user) {
+  //     if (user) {
+  //       const videoDetails = {
+  //         name: name,
+  //         brand: brand,
+  //         storageRef: uri,
+  //         primaryVideoCategory: category,
+  //         keywords: [],
+  //         publishedDate: Date.now(),
+  //         totalViews: 0,
+  //         viewHistory: []
+  //       };
+  //       const newKey = firebase
+  //         .database()
+  //         .ref('videos')
+  //         .push().key;
 
-    console.log('text', input);
-    this.setState({ title: '' });
+  //       firebase
+  //         .database()
+  //         .ref('videos')
+  //         .child(newKey)
+  //         .set(videoDetails);
+  //       // dispatch(videoAdded(video));
+  //     } else {
+  //       console.log('not setting stuff');
+  //       console.error(err);
+  //     }
+  //   });
+  //   this.props.history.push('/');
+  // };
+
+  handleSubmit() {
+    const name = this.state.name;
+    const brand = this.state.brand;
+    const storageReference = this.state.uri;
+    const primaryVideoCategory = this.state.category;
+
+    this.props.addNewVideo(name, brand, storageReference, primaryVideoCategory);
+    ///add a dispatch function
+    this.props.history.push('/');
+    this.setState({
+      name: '',
+      brand: '',
+      uri: '',
+      category: ''
+    });
     //then redirect to home
   }
   render() {
     const { classes } = this.props;
-    return (
+    const loggedIn = this.state.user;
+    return loggedIn ? (
       <Paper style={{ height: 500 }}>
         <div>
           <Card
@@ -130,8 +189,8 @@ export default class CreateVideo extends React.Component {
                   root: styles.inputRoot,
                   input: styles.inputInput
                 }}
-                value={this.state.storageReference}
-                onChange={event => this.setState({ title: event.target.value })}
+                value={this.state.uri}
+                onChange={event => this.setState({ uri: event.target.value })}
                 margin="normal"
                 variant="outlined"
                 label="uri"
@@ -146,8 +205,10 @@ export default class CreateVideo extends React.Component {
                   root: styles.inputRoot,
                   input: styles.inputInput
                 }}
-                value={this.state.primaryVideoCategory}
-                onChange={event => this.setState({ title: event.target.value })}
+                value={this.state.category}
+                onChange={event =>
+                  this.setState({ category: event.target.value })
+                }
                 margin="normal"
                 variant="outlined"
                 label="primary category"
@@ -155,7 +216,7 @@ export default class CreateVideo extends React.Component {
                 centered
               />
             </CardContent>
-            <CardContent align="center">
+            {/* <CardContent align="center">
               <TextField
                 id="outlined-multiline-flexible"
                 classes={{
@@ -163,14 +224,14 @@ export default class CreateVideo extends React.Component {
                   input: styles.inputInput
                 }}
                 value={this.state.primaryVideoCategory}
-                onChange={event => this.setState({ title: event.target.value })}
+                onChange={event => this.setState({ keywords: event.target.value })}
                 margin="normal"
                 variant="outlined"
                 label="keywords"
                 helperText="two words to describe this video"
                 centered
               />
-            </CardContent>
+            </CardContent> */}
             <CardContent align="center">
               <Button
                 variant="contained"
@@ -183,6 +244,22 @@ export default class CreateVideo extends React.Component {
           </Card>
         </div>
       </Paper>
+    ) : (
+      <Card
+        style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          height: '25%'
+        }}
+      >
+        <Typography
+          variant="h3"
+          style={{ fontFamily: 'Signika' }}
+          align="center"
+        >
+          Sign up and Login for the love!!
+        </Typography>
+      </Card>
     );
   }
 }

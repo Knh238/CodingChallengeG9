@@ -27,7 +27,6 @@ export default class Home extends React.Component {
           marginRight: 'auto'
         }}
       >
-        {' '}
         <Typography
           variant="h3"
           style={{ fontFamily: 'Signika' }}
@@ -35,6 +34,45 @@ export default class Home extends React.Component {
         >
           welcome!!
         </Typography>
+        <Button
+          variant="contained"
+          title="login"
+          text="login"
+          style={{
+            marginLeft: '25%',
+
+            fontSize: 30,
+            backgroundColor: '#03A9F4'
+          }}
+          textStyle={{ color: 'white' }}
+          component={Link}
+          to={{
+            pathname: '/Login'
+          }}
+        >
+          <Typography variant="display1" align="center">
+            Login
+          </Typography>
+        </Button>
+        <Button
+          variant="contained"
+          style={{
+            marginLeft: '30%',
+
+            fontSize: 30,
+            backgroundColor: '#00BCD4',
+            color: 'white'
+          }}
+          component={Link}
+          to={{
+            pathname: '/Signup'
+          }}
+          title="sign up"
+        >
+          <Typography variant="display1" align="center">
+            Sign up
+          </Typography>
+        </Button>
         <CardContent align="center">
           <CardMedia
             component="img"

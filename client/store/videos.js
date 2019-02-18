@@ -1,11 +1,11 @@
 import axios from 'axios';
 // import history from '../history';
-import firebase from '.../server';
+import firebase from '../firebase';
 
 const VIDEO_ADDED = 'VIDEO_ADDED';
 const VIEW_ADDED = 'VIEW_ADDED';
 const GOT_VIDEO = 'GOT_VIDEO';
-const GOT_VIDEO_VIEWS = 'GOT_VIDEO_VIEWS';
+const GOT_VIEW_REPORT = 'GOT_VIEW_REPORT';
 const GOT_ALL_VIDEOS = 'GOT_ALL_VIDEOS';
 const GOT_KEYTERM_LIST = 'GOT_KEYTERM_LIST';
 
@@ -25,8 +25,8 @@ const gotAllVideos = video => ({
   type: GOT_ALL_VIDEOS,
   video
 });
-const gotVideoViews = video => ({
-  type: GOT_VIDEO_VIEWS,
+const gotViewReport = video => ({
+  type: GOT_VIEW_REPORT,
   video
 });
 const gotKeytermList = list => ({
@@ -83,18 +83,15 @@ export const getAllVideos = () => {
   return async dispatch => {
     try {
       const allVideos = [];
-      const ref = await firebase.database().ref('videos');
-      ref.on('value', function(snapshot) {
-        const videos = snapshot.val();
-        for (let key in videos) {
-          // if()
-          let singleVideo = {
-            name: videos[key].name,
-            uri: videos[key].storageReference,
-            brand: videos[key].brand,
-            views: videos[key].totalViews
-          };
-          allVideos.push(singleVideo);
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          const allVideos = [];
+          const ref = firebase.database().ref('videos');
+          ref.on('value', function(snapshot) {
+            const videos = snapshot.val();
+
+            allVideos.push(videos);
+          });
         }
       });
 
@@ -128,27 +125,31 @@ export const getAllVideos = () => {
 export const addNewVideo = (name, brand, uri, category) => {
   return async dispatch => {
     try {
-      const videoDetails = {
-        name: name,
-        brand: brand,
-        storageRef: uri,
-        primaryVideoCategory: category,
-        keywords: [],
-        publishedDate: Date.now(),
-        totalViews: 0,
-        viewHistory: []
-      };
-      const newKey = await firebase
-        .database()
-        .ref('videos')
-        .push().key;
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          const videoDetails = {
+            name: name,
+            brand: brand,
+            storageRef: uri,
+            primaryVideoCategory: category,
+            keywords: [],
+            publishedDate: Date.now(),
+            totalViews: 0,
+            viewHistory: []
+          };
+          const newKey = firebase
+            .database()
+            .ref('videos')
+            .push().key;
 
-      const video = await firebase
-        .database()
-        .ref('videos')
-        .child(newKey)
-        .set(videoDetails);
-      dispatch(videoAdded(video));
+          const video = firebase
+            .database()
+            .ref('videos')
+            .child(newKey)
+            .set(videoDetails);
+          dispatch(videoAdded(video));
+        }
+      });
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
@@ -171,7 +172,7 @@ export const addNewView = (videoId, brand, platform, user) => {
         .database()
         .ref('views')
         .push().key;
-      firebase
+      const video = await firebase
         .database()
         .ref('views')
         .child(newKey)
@@ -187,18 +188,36 @@ export const addNewView = (videoId, brand, platform, user) => {
     //pass ti the video id and new view
   };
 };
+
 /* postgres*/
-export const getViews = id => {
-  // (id, ownProps)
+// export const getViewReport = id => {
+//   // (id, ownProps)
+//   return async dispatch => {
+//     try {
+//       const { data } = await axios.get(`/videos/views/${id}`);
+//       const view= data;
+//       dispatch(gotViewReport(view));
+//     } catch (err) {
+//       console.log('not setting stuff');
+//       console.error(err);
+//       //ownProps.history.push(`/oops`);
+//     }
+//   };
+// };
+
+export const getViewReport = id => {
   return async dispatch => {
     try {
-      const { data } = await axios.get(`/videos/views/${id}`);
-      const video = data;
-      dispatch(gotVideoViews(video));
+      let allViews = [];
+      const ref = await firebase.database().ref('views' + id);
+      ref.on('value', function(snapshot) {
+        const views = snapshot.val();
+        allViews.push(views);
+      });
+      dispatch(gotViewReport(allViews));
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
-      //ownProps.history.push(`/oops`);
     }
   };
 };
@@ -234,7 +253,7 @@ const videosReducer = (state = initialState, action) => {
         ...state,
         currentVideo: [...state.currentVideo, action.video]
       };
-    case GOT_VIDEO_VIEWS:
+    case GOT_VIEW_REPORT:
       return {
         ...state,
         currentVideo: [...state.currentVideo, action.video]

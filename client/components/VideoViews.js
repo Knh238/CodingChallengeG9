@@ -9,13 +9,23 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import firebase from '../firebase';
 
 export default class VideoViews extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: '', brand: '' };
+    this.state = { title: '', brand: '', user: '' };
   }
-
+  componentDidMount() {
+    const self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        self.setState({ user: user.email });
+      } else {
+        self.setState({ user: '' });
+      }
+    });
+  }
   handleSubmit() {
     const input = this.state.title;
 
@@ -23,7 +33,8 @@ export default class VideoViews extends React.Component {
     this.setState({ title: '' });
   }
   render() {
-    return (
+    const loggedIn = this.state.user;
+    return loggedIn ? (
       <Card
         style={{
           float: 'none',
@@ -70,6 +81,22 @@ export default class VideoViews extends React.Component {
             Submit
           </Button>
         </CardContent>
+      </Card>
+    ) : (
+      <Card
+        style={{
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          height: '25%'
+        }}
+      >
+        <Typography
+          variant="h3"
+          style={{ fontFamily: 'Signika' }}
+          align="center"
+        >
+          Sign up and Login for the love!!
+        </Typography>
       </Card>
     );
   }
