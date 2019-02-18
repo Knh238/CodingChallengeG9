@@ -31,13 +31,12 @@ export default class VideoViews extends React.Component {
           marginRight: 'auto'
         }}
       >
-        {' '}
         <Typography
           variant="h3"
           style={{ fontFamily: 'Signika' }}
           align="center"
         >
-          report of video views
+          Generate a report of video views
         </Typography>
         <CardContent align="center">
           <CardMedia
@@ -58,6 +57,7 @@ export default class VideoViews extends React.Component {
             onChange={event => this.setState({ title: event.target.value })}
             margin="normal"
             variant="outlined"
+            label="video id:"
             centered
           />
         </CardContent>

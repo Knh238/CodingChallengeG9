@@ -76,7 +76,7 @@ export default class CreateVideo extends React.Component {
                 align="center"
                 style={{ height: '20%', width: '20%' }}
                 component="img"
-                image="https://cdn130.picsart.com/280711530004201.jpg?c480x480"
+                image="https://cdn141.picsart.com/243285382031202.jpg?c480x480"
                 title="home"
               />
             </CardContent>
@@ -101,15 +101,15 @@ export default class CreateVideo extends React.Component {
                 value={this.state.name}
                 onChange={event => this.setState({ name: event.target.value })}
                 margin="normal"
+                helperText="Enter Video Name"
                 variant="outlined"
                 centered
               />
-            </CardContent>
-            <CardContent align="center">
+
               <TextField
                 id="outlined-select-currency"
                 select
-                label="Select"
+                label="Select Brand"
                 value={this.state.brand}
                 onChange={this.handleChange('brand')}
                 helperText="Select Brand"
@@ -135,6 +135,7 @@ export default class CreateVideo extends React.Component {
                 margin="normal"
                 variant="outlined"
                 label="uri"
+                helperText="Enter location of video"
                 centered
               />
             </CardContent>
@@ -150,6 +151,23 @@ export default class CreateVideo extends React.Component {
                 margin="normal"
                 variant="outlined"
                 label="primary category"
+                helperText="two words to describe this video"
+                centered
+              />
+            </CardContent>
+            <CardContent align="center">
+              <TextField
+                id="outlined-multiline-flexible"
+                classes={{
+                  root: styles.inputRoot,
+                  input: styles.inputInput
+                }}
+                value={this.state.primaryVideoCategory}
+                onChange={event => this.setState({ title: event.target.value })}
+                margin="normal"
+                variant="outlined"
+                label="keywords"
+                helperText="two words to describe this video"
                 centered
               />
             </CardContent>

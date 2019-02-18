@@ -20,4 +20,11 @@ const View = db.define('view', {
   }
 });
 
+// Views.findByDate = async function(date) {
+
+//   const response = await Views.findAll({ where: { dateViewed: name } });
+//   //greater than sign in
+//   return response[0];
+// };
+
 module.exports = View;
