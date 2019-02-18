@@ -72,6 +72,27 @@ export const getViews = id => {
     }
   };
 };
+export const addNewView = (videoId, brand, platform, user) => {
+  const viewDetails = {
+    videoId: videoId,
+    brand: brand,
+    platform: platform,
+    dateViewed: Date.now(),
+    user: user
+  };
+  const newKey = firebase
+    .database()
+    .ref('views')
+    .push().key;
+  firebase
+    .database()
+    .ref('views')
+    .child(newKey)
+    .set(viewDetails);
+  //return the new view
+  //callupdate videoviews
+  //pass ti the video id and new view
+};
 
 export const getKeytermList = keyword => {
   return async dispatch => {

@@ -38,38 +38,10 @@ export default class Home extends React.Component {
         <CardContent align="center">
           <CardMedia
             component="img"
-            style={{ height: '60%', width: '60%' }}
+            style={{ height: '50%', width: '50%' }}
             image="https://cdn140.picsart.com/287223507017201.jpg?c480x480"
             title="road"
           />
-        </CardContent>
-        <CardContent align="center">
-          <Typography variant="h2" style={{ fontFamily: 'Signika' }}>
-            what would you like to do? option buttons
-          </Typography>
-        </CardContent>
-        <CardContent align="center">
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#ef9a9a' }}
-            onClick={() => this.handleSubmit()}
-          >
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#ef9a9a' }}
-            onClick={() => this.handleSubmit()}
-          >
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            style={{ backgroundColor: '#ef9a9a' }}
-            onClick={() => this.handleSubmit()}
-          >
-            Submit
-          </Button>
         </CardContent>
       </Card>
     );

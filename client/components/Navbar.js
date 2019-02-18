@@ -57,19 +57,14 @@ export default class Navbar extends React.Component {
             }}
           >
             <VideoLibraryIcon />
-            Track
+            Watch
           </Button>
-          <div style={{ marginLeft: '20%' }}>
-            <Typography
-              style={{ flex: 'center' }}
-              variant="h4"
-              color="inherit"
-              noWrap
-            >
-              App Build Group Nine Media
+          <div style={{ flexGrow: 1 }}>
+            <Typography align="center" variant="h4" color="inherit" noWrap>
+              Coding Challenge Submission: Kristin
             </Typography>
           </div>
-          <div style={{ marginRight: 0 }}>
+          <div style={{ float: 'right' }}>
             <Button
               variant="contained"
               style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}

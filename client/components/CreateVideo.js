@@ -10,20 +10,50 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-
+import MenuItem from '@material-ui/core/MenuItem';
+const brands = [
+  {
+    value: 'Thrillist',
+    label: 'Thrillist'
+  },
+  {
+    value: 'Seeker',
+    label: 'Seeker'
+  },
+  {
+    value: 'TheDodo',
+    label: 'The Dodo'
+  },
+  {
+    value: 'NowThis',
+    label: 'Now This'
+  }
+];
 export default class CreateVideo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: '', brand: '' };
+    this.state = {
+      title: '',
+      brand: '',
+      storageReference: '',
+      primaryVideoCategory: '',
+      keywords: []
+    };
   }
-
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
+    });
+  };
   handleSubmit() {
     const input = this.state.title;
 
     console.log('text', input);
     this.setState({ title: '' });
+    //then redirect to home
   }
   render() {
+    const { classes } = this.props;
     return (
       <Paper style={{ height: 500 }}>
         <div>
@@ -44,7 +74,7 @@ export default class CreateVideo extends React.Component {
             <CardContent align="center">
               <CardMedia
                 align="center"
-                style={{ height: '30%', width: '30%' }}
+                style={{ height: '20%', width: '20%' }}
                 component="img"
                 image="https://cdn130.picsart.com/280711530004201.jpg?c480x480"
                 title="home"
@@ -60,14 +90,38 @@ export default class CreateVideo extends React.Component {
               marginRight: 'auto'
             }}
           >
-            <CardContent>
-              <Typography
-                variant="h4"
-                style={{ fontFamily: 'Signika' }}
-                align="center"
+            <CardContent align="center">
+              <TextField
+                id="outlined-multiline-flexible"
+                classes={{
+                  root: styles.inputRoot,
+                  input: styles.inputInput
+                }}
+                label="name"
+                value={this.state.name}
+                onChange={event => this.setState({ name: event.target.value })}
+                margin="normal"
+                variant="outlined"
+                centered
+              />
+            </CardContent>
+            <CardContent align="center">
+              <TextField
+                id="outlined-select-currency"
+                select
+                label="Select"
+                value={this.state.brand}
+                onChange={this.handleChange('brand')}
+                helperText="Select Brand"
+                margin="normal"
+                variant="outlined"
               >
-                options buttons here
-              </Typography>
+                {brands.map(option => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
             </CardContent>
             <CardContent align="center">
               <TextField
@@ -76,10 +130,26 @@ export default class CreateVideo extends React.Component {
                   root: styles.inputRoot,
                   input: styles.inputInput
                 }}
-                value={this.state.title}
+                value={this.state.storageReference}
                 onChange={event => this.setState({ title: event.target.value })}
                 margin="normal"
                 variant="outlined"
+                label="uri"
+                centered
+              />
+            </CardContent>
+            <CardContent align="center">
+              <TextField
+                id="outlined-multiline-flexible"
+                classes={{
+                  root: styles.inputRoot,
+                  input: styles.inputInput
+                }}
+                value={this.state.primaryVideoCategory}
+                onChange={event => this.setState({ title: event.target.value })}
+                margin="normal"
+                variant="outlined"
+                label="primary category"
                 centered
               />
             </CardContent>
@@ -91,30 +161,6 @@ export default class CreateVideo extends React.Component {
               >
                 Submit
               </Button>
-            </CardContent>
-          </Card>
-        </div>
-        <div>
-          <Card
-            style={{
-              float: 'none',
-              height: '30%',
-              marginLeft: 'auto',
-              marginRight: 'auto',
-              backgroundColor: '#009688'
-            }}
-          >
-            <CardContent align="center">
-              <Typography
-                paragraph
-                gutterBottom
-                variant="h5"
-                style={{
-                  fontFamily: 'Signika'
-                }}
-              >
-                stuff here?
-              </Typography>
             </CardContent>
           </Card>
         </div>
@@ -146,5 +192,19 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       width: 200
     }
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
+  dense: {
+    marginTop: 16
+  },
+  menu: {
+    width: 200
   }
 });

@@ -43,7 +43,7 @@ export default class VideoViews extends React.Component {
           <CardMedia
             component="img"
             style={{ height: '30%', width: '20%' }}
-            image="https://cdn131.picsart.com/286643107084201.jpg?c480x480"
+            image="https://cdn130.picsart.com/287703920011201.jpg?c480x480"
             title="home"
           />
         </CardContent>
