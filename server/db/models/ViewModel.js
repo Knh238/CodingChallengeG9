@@ -2,10 +2,6 @@ const Sequelize = require('sequelize');
 const db = require('../db');
 
 const View = db.define('view', {
-  //   videoId: {
-  //     type: Sequelize.STRING,
-  //     allowNull: false
-  //   },
   brand: {
     type: Sequelize.ENUM('NowThis', 'TheDodo', 'Thrillist', 'Seeker'),
     allowNull: false

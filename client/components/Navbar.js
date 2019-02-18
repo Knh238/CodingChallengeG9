@@ -75,7 +75,7 @@ export default class Navbar extends React.Component {
               style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
               component={Link}
               to={{
-                pathname: '/Views'
+                pathname: '/ViewHistory'
               }}
             >
               <HistoryIcon />

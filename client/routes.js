@@ -19,7 +19,7 @@ export default class Routes extends Component {
         <Route exact path="/" component={Home} />
         <Route exact path="/AddVideo" component={CreateVideo} />
         <Route exact path="/Track" component={TrackVideo} />
-        <Route exact path="/Views" component={VideoViews} />
+        <Route exact path="/ViewHistory" component={VideoViews} />
         <Route exact path="/Keyword" component={KeywordListing} />
       </Switch>
     );
