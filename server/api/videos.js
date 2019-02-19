@@ -68,8 +68,9 @@ router.get('/:videoId/report', async (req, res, next) => {
 //returns a list of views in detail
 router.get('/:videoId/views', async (req, res, next) => {
   try {
-    const videoId = req.params.videoId;
-    const viewHistory = await View.findAll({ where: { videoId: videoId } });
+    const viewHistory = await View.findAll({
+      where: { videoId: req.params.videoId }
+    });
     console.log('view history in get', viewHistory);
     res.status(200).json({ views: viewHistory });
   } catch (err) {
