@@ -36,6 +36,7 @@ class Navbar extends React.Component {
           </IconButton>
           <Button
             variant="contained"
+            small
             style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
             component={Link}
             to={{
@@ -46,6 +47,7 @@ class Navbar extends React.Component {
             Video
           </Button>
           <Button
+            small
             variant="contained"
             style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
             component={Link}
@@ -57,12 +59,13 @@ class Navbar extends React.Component {
             Watch
           </Button>
           <div style={{ flexGrow: 1 }}>
-            <Typography align="center" variant="h4" color="inherit" noWrap>
+            <Typography align="center" variant="h5" color="inherit" noWrap>
               Coding Challenge Submission: Kristin
             </Typography>
           </div>
           <div style={{ float: 'right' }}>
             <Button
+              small
               variant="contained"
               style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
               component={Link}
@@ -74,6 +77,7 @@ class Navbar extends React.Component {
               Views
             </Button>
             <Button
+              small
               variant="contained"
               style={{ backgroundColor: '#ef9a9a', marginLeft: 10 }}
               component={Link}
@@ -82,7 +86,7 @@ class Navbar extends React.Component {
               }}
             >
               <SearchIcon />
-              By Keyword
+              {/* By Keyword */}
             </Button>
           </div>
         </Toolbar>

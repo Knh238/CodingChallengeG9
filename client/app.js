@@ -1,8 +1,6 @@
 import React from 'react';
 import Routes from './routes';
 import { Navbar } from './components';
-import { connect } from 'react-redux';
-import { getAllVideos } from './store/videos';
 
 class App extends React.Component {
   constructor() {
@@ -19,8 +17,7 @@ class App extends React.Component {
         <div
           style={{
             left: '10%',
-            marginTop: '3%',
-            height: '25%',
+            marginTop: '8%',
             padding: 10
           }}
         >

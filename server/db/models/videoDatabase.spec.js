@@ -1,8 +1,8 @@
-// const {expect} = require('chai')
-// const request = require('supertest')
-// const db = require('../db')
-// const app = require('../index')
-// const Video = db.model('video')
+const { expect } = require('chai');
+const request = require('supertest');
+const db = require('../db');
+const app = require('../index');
+const Video = db.model('video');
 
 // const videoDetails = {
 //     name: 'titleSetBYYou',
@@ -279,74 +279,6 @@
 //     });
 //   });
 
-//   /**
-//    * Your model should have a field called `version`,
-//    * which increases by 1 every time you save
-//    *
-//    * http://docs.sequelizejs.com/manual/tutorial/hooks.html
-//    */
-
-//   describe('`version` field', () => {
-//     beforeEach(() => {
-//       return Article.create({
-//         title: 'Biological Immortality',
-//         content:
-//           'Biological immortality refers to a stable or decreasing rate of mortality from senescence, thus decoupling it from chronological age.'
-//       });
-//     });
-
-//     xit('is originally 0, even if not explicitly set', async () => {
-//       const foundArticle = await Article.findOne({
-//         where: { title: 'Biological Immortality' }
-//       });
-//       expect(foundArticle.version).to.equal(0);
-//     });
-
-//     xit('increments by 1 every time the article is updated', async () => {
-//       const foundArticle = await Article.findOne({
-//         where: { title: 'Biological Immortality' }
-//       });
-//       expect(foundArticle.version).to.equal(0);
-
-//       const updatedArticle = await foundArticle.update({
-//         content: 'Biological immortality is a lie!'
-//       });
-//       expect(updatedArticle.version).to.equal(1);
-
-//       const updatedArticle2 = await updatedArticle.update({
-//         content: 'Have you seen the 19th century painting of Keanu Reeves?'
-//       });
-//       expect(updatedArticle2.version).to.equal(2);
-
-//       // we "reload" the article from the database,
-//       // just to make sure that the changes to the version
-//       // were saved properly!
-//       const reloadedArticle = await updatedArticle.reload();
-//       expect(reloadedArticle.version).to.equal(2);
-//     });
-//   });
-
-//   describe('extra credit `tags` field', () => {
-//     /** EXTRA CREDIT
-//      * Your Article model should have a tag field that's an array, but when we
-//      * access it, we should get one string: the tags joined by a comma and space
-//      *
-//      * Look at getters and setters:
-//      * http://docs.sequelizejs.com/manual/tutorial/models-definition.html#getters-setters
-//      *
-//      * To activate this spec, change `xit` to `it`
-//      */
-//     xit('is a custom getter', async () => {
-//       // tags should have a `defaultValue` that is an empty array.
-//       expect(Article.attributes.tags.defaultValue).to.deep.equal([]);
-
-//       // main functionality of tags
-//       const createdArticle = await Article.create({
-//         title: 'Taggy',
-//         content: 'So Taggy',
-//         tags: ['tag1', 'tag2', 'tag3']
-//       });
-//       expect(createdArticle.tags).to.equal('tag1, tag2, tag3');
-//     });
+//
 //   });
 // });

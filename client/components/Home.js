@@ -38,8 +38,7 @@ class Home extends React.Component {
           text="login"
           style={{
             marginLeft: '25%',
-
-            fontSize: 30,
+            fontSize: 20,
             backgroundColor: '#03A9F4'
           }}
           textStyle={{ color: 'white' }}
@@ -48,16 +47,16 @@ class Home extends React.Component {
             pathname: '/Login'
           }}
         >
-          <Typography variant="display1" align="center">
+          <Typography variant="h5" align="center">
             Login
           </Typography>
         </Button>
         <Button
+          small
           variant="contained"
           style={{
-            marginLeft: '30%',
-
-            fontSize: 30,
+            marginLeft: '38%',
+            fontSize: 20,
             backgroundColor: '#00BCD4',
             color: 'white'
           }}
@@ -67,7 +66,7 @@ class Home extends React.Component {
           }}
           title="sign up"
         >
-          <Typography variant="display1" align="center">
+          <Typography variant="h5" align="center">
             Sign up
           </Typography>
         </Button>

@@ -96,20 +96,7 @@ router.post('/view/', async (req, res, next) => {
     const videoId = req.body.videoId;
     console.log('video is in here', req.body);
     const newView = await View.create(videoInfo);
-    // const currentVideo = await Video.findById(videoId);
-    // const newViewHistory = currentVideo.viewHistory.push(newView);
-    // {'job_ids': sequelize.fn('array_append', sequelize.col('job_ids'), new_jobId)},
-    // {'where': {'id': roomId}}
-    // await Video.update(
-    //   {
-    //     viewHistory: Sequelize.fn(
-    //       'array_append',
-    //       Sequelize.col('viewHistory'),
-    //       newView
-    //     )
-    //   },
-    //   { where: { id: videoId } }
-    // );
+
     res.status(201).json({ newView: newView });
   } catch (err) {
     next(err);
