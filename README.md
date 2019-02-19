@@ -10,3 +10,14 @@ Because I know the team is transitioning from one database type to a firebase ba
     Access to the console available upon request
 
 To run tests:
+
+<!-- // const videoDetails = {
+//     name: 'titleSetBYYou',
+//     brand: '',
+//     storageReference: '',
+//     primaryVideoCategory: '',
+//     keywords: [],
+//     publishedDate: Date.now(),
+//     totalViews: 0,
+//     viewHistory: []
+//   }; -->

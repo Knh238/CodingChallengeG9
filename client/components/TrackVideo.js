@@ -4,13 +4,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Paper from '@material-ui/core/Paper';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { addNewView } from '../store/videos';
 import firebase from '../firebase';
@@ -36,12 +32,6 @@ class TrackVideo extends React.Component {
       .once('value')
       .then(function(snapshot) {
         var videos = snapshot.val();
-        //event listener Style:
-        // firebase.auth().onAuthStateChanged(function(user) {
-        //   if (user) {
-        //     const ref = firebase.database().ref('videos');
-        //     ref.on('value', function(snapshot) {
-        //       const videos = snapshot.val();
         for (let key in videos) {
           let singleVideo = {
             key: key,

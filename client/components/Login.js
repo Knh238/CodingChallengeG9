@@ -39,7 +39,6 @@ export default class LoginForm extends Component {
         });
     }
     const user = firebase.auth().currentUser;
-    // this.props.handleLogin(user);
     this.props.history.push('/');
   }
 

@@ -3,37 +3,38 @@ import {
   VIEW_ADDED,
   GOT_VIDEO,
   GOT_VIEW_REPORT,
-  GOT_ALL_VIDEOS,
-  GOT_KEYTERM_LIST
+  GOT_ALL_VIDEOS
+  //   GOT_KEYTERM_LIST
 } from '../actions';
 
 const initialState = {
   video: [],
   videoList: [],
-  views: []
+  views: [],
+  viewReport: {}
 };
 
 const videosReducer = (state = initialState, action) => {
   switch (action.type) {
     case VIDEO_ADDED:
-      return { ...state, videoList: action.video };
+      return { ...state, video: action.video };
     case VIEW_ADDED:
-      return { ...state, stockList: action.video };
+      return { ...state, views: [...state.views, action.view] };
     case GOT_VIDEO:
       return {
         ...state,
-        currentVideo: [...state.currentVideo, action.video]
+        video: action.video
       };
     case GOT_VIEW_REPORT:
       return {
         ...state,
         views: [...state.views, action.views]
       };
-    case GOT_KEYTERM_LIST:
-      return {
-        ...state,
-        videoList: [...state.currentVideo, action.video]
-      };
+    // case GOT_KEYTERM_LIST:
+    //   return {
+    //     ...state,
+    //     videoList: [...state.currentVideo, action.video]
+    //   };
     case GOT_ALL_VIDEOS:
       return {
         ...state,

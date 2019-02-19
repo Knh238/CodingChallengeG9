@@ -5,7 +5,7 @@ export const VIEW_ADDED = 'VIEW_ADDED';
 export const GOT_VIDEO = 'GOT_VIDEO';
 export const GOT_VIEW_REPORT = 'GOT_VIEW_REPORT';
 export const GOT_ALL_VIDEOS = 'GOT_ALL_VIDEOS';
-export const GOT_KEYTERM_LIST = 'GOT_KEYTERM_LIST';
+export const GOT_VIDEO_VIEWS = 'GOT_VIDEO_VIEWS';
 
 export const videoAdded = video => ({
   type: VIDEO_ADDED,
@@ -23,46 +23,15 @@ export const gotAllVideos = videoList => ({
   type: GOT_ALL_VIDEOS,
   videoList
 });
-export const gotViewReport = views => ({
+export const gotViewReport = viewReport => ({
   type: GOT_VIEW_REPORT,
+  viewReport
+});
+export const gotVideoViews = views => ({
+  type: GOT_VIDEO_VIEWS,
   views
 });
-export const gotKeytermList = list => ({
-  type: GOT_KEYTERM_LIST,
-  list
-});
 
-/* postgres*/
-// export const getVideo = id => {
-//   // (id, ownProps)
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.get(`/video/${id}`);
-//       const video = data;
-//       dispatch(gotVideo(video));
-//     } catch (err) {
-//       console.log('not setting stuff');
-//       console.error(err);
-//       //ownProps.history.push(`/oops`);
-//     }
-//   };
-// };
-
-/* postgres*/
-// export const getVideo = id => {
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.get(`/video/${id}`);
-//       const video = data;
-//       dispatch(gotVideo(video));
-//     } catch (err) {
-//       console.log('not setting stuff');
-//       console.error(err);
-//     }
-//   };
-// };
-
-/* firebase*/
 export const getVideo = id => {
   return async dispatch => {
     try {
@@ -126,22 +95,6 @@ export const getAllVideos = () => {
   };
 };
 
-/* postgres*/
-// export const addNewVideo = newVideo => {
-//   //(newVideo,ownProps)
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.post(`/videos/`, newVideo);
-//       const video = data;
-//       dispatch(videoAdded(video));
-//       //   ownProps.history.push(`/campuses`);
-//     } catch (err) {
-//       console.error(err);
-//       // ownProps.history.push(`/oops`);
-//     }
-//   };
-// };
-/* firebase*/
 export const addNewVideo = (name, brand, uri, category) => {
   return async dispatch => {
     try {
@@ -177,7 +130,6 @@ export const addNewVideo = (name, brand, uri, category) => {
   };
 };
 
-/* firebase*/
 export const addNewView = (videoId, brand, platform, user, viewCount) => {
   return async dispatch => {
     try {
@@ -210,22 +162,6 @@ export const addNewView = (videoId, brand, platform, user, viewCount) => {
   };
 };
 
-/* postgres*/
-// export const getViewReport = id => {
-//   // (id, ownProps)
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.get(`/videos/views/${id}`);
-//       const view= data;
-//       dispatch(gotViewReport(view));
-//     } catch (err) {
-//       console.log('not setting stuff');
-//       console.error(err);
-//       //ownProps.history.push(`/oops`);
-//     }
-//   };
-// };
-
 export const getVideoViews = id => {
   return async dispatch => {
     try {
@@ -251,35 +187,7 @@ export const getVideoViews = id => {
         }
       });
 
-      dispatch(gotViewReport(videoViews));
-    } catch (err) {
-      console.log('not setting stuff');
-      console.error(err);
-    }
-  };
-};
-export const getViewReport = id => {
-  return async dispatch => {
-    try {
-      let videoViews = [];
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          const ref = firebase.database().ref('videos' + id);
-          ref.on('value', function(snapshot) {
-            const video = snapshot.val();
-            for (let key in video) {
-              let viewInfo = {
-                brand: video[key].brand,
-                name: video[key].name,
-                publishedDate: video[key].storageRef,
-                totalViews: video[key].totalViews
-              };
-              videoViews.push(viewInfo);
-            }
-          });
-        }
-      });
-      dispatch(gotViewReport(videoViews));
+      dispatch(gotVideoViews(videoViews));
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
@@ -287,16 +195,34 @@ export const getViewReport = id => {
   };
 };
 
-// export const getKeytermList = keyword => {
-//   return async dispatch => {
-//     try {
-//       const { data } = await axios.get(`/keywords/${keyword}`);
-//       const videoList = data;
-//       dispatch(gotKeytermList(videoList));
-//     } catch (err) {
-//       console.log('not setting stuff');
-//       console.error(err);
-//       //ownProps.history.push(`/oops`);
-//     }
-//   };
-// };
+export const getViewReport = id => {
+  return async dispatch => {
+    try {
+      const videoInfo = {};
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          const ref = firebase.database().ref('videos');
+          ref.on('value', function(snapshot) {
+            const video = snapshot.val();
+            for (let key in video) {
+              if (key === id) {
+                const published = moment(video[key].publishedDate).format(
+                  'MMMM DoYYYY, h:mm:ss a'
+                );
+                videoInfo.brand = ideo[key].brand;
+                videoInfo.name = video[key].name;
+                videoInfo.publishedDate = published;
+                videoInfo.url = video[key].storageRef;
+                videoInfo.totalViews = video[key].totalViews;
+              }
+            }
+          });
+        }
+      });
+      dispatch(gotViewReport(videoInfo));
+    } catch (err) {
+      console.log('not setting stuff');
+      console.error(err);
+    }
+  };
+};

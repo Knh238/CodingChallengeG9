@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
@@ -13,9 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { addNewVideo } from '../store/videos';
-
 import firebase from '../firebase';
-// const firebaseDB = firebase.database();
 
 const brands = [
   {
@@ -44,7 +40,6 @@ class CreateVideo extends React.Component {
       uri: '',
       category: '',
       user: ''
-      // keywords: []
     };
   }
   componentDidMount() {
@@ -63,37 +58,6 @@ class CreateVideo extends React.Component {
       [name]: event.target.value
     });
   };
-  // addNewVideo = (name, brand, uri, category) => {
-  //   firebase.auth().onAuthStateChanged(function(user) {
-  //     if (user) {
-  //       const videoDetails = {
-  //         name: name,
-  //         brand: brand,
-  //         storageRef: uri,
-  //         primaryVideoCategory: category,
-  //         keywords: [],
-  //         publishedDate: Date.now(),
-  //         totalViews: 0,
-  //         viewHistory: []
-  //       };
-  //       const newKey = firebase
-  //         .database()
-  //         .ref('videos')
-  //         .push().key;
-
-  //       firebase
-  //         .database()
-  //         .ref('videos')
-  //         .child(newKey)
-  //         .set(videoDetails);
-  //       // dispatch(videoAdded(video));
-  //     } else {
-  //       console.log('not setting stuff');
-  //       console.error(err);
-  //     }
-  //   });
-  //   this.props.history.push('/');
-  // };
 
   handleSubmit() {
     const name = this.state.name;
@@ -102,15 +66,14 @@ class CreateVideo extends React.Component {
     const primaryVideoCategory = this.state.category;
 
     this.props.addNewVideo(name, brand, storageReference, primaryVideoCategory);
-    ///add a dispatch function
-    this.props.history.push('/');
+
     this.setState({
       name: '',
       brand: '',
       uri: '',
       category: ''
     });
-    //then redirect to home
+    this.props.history.push('/');
   }
   render() {
     const { classes } = this.props;
@@ -218,22 +181,7 @@ class CreateVideo extends React.Component {
                 centered
               />
             </CardContent>
-            {/* <CardContent align="center">
-              <TextField
-                id="outlined-multiline-flexible"
-                classes={{
-                  root: styles.inputRoot,
-                  input: styles.inputInput
-                }}
-                value={this.state.primaryVideoCategory}
-                onChange={event => this.setState({ keywords: event.target.value })}
-                margin="normal"
-                variant="outlined"
-                label="keywords"
-                helperText="two words to describe this video"
-                centered
-              />
-            </CardContent> */}
+
             <CardContent align="center">
               <Button
                 variant="contained"

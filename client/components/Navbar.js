@@ -3,16 +3,9 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
 import Icon from '@material-ui/core/Icon';
@@ -22,20 +15,13 @@ import SearchIcon from '@material-ui/icons/Search';
 import HistoryIcon from '@material-ui/icons/History';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import { connect } from 'react-redux';
-import { getAllVideos } from '../store/videos';
-
-import { CardHeader } from '@material-ui/core';
 
 class Navbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { videoList: [] };
-    // this.listAllVideos = this.listAllVideos.bind(this);
+    this.state = {};
   }
-  async componentDidMount() {
-    // await this.props.getAllVideos();
-    await this.props.getAllVideos();
-  }
+
   render() {
     return (
       <AppBar position="fixed" style={{ background: '#26C6DA' }}>
@@ -123,11 +109,4 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    getAllVideos: () => {
-      dispatch(getAllVideos());
-    }
-  };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
+export default connect(mapStateToProps, null)(Navbar);

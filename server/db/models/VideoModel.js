@@ -45,20 +45,4 @@ Video.findByTitle = async function(name) {
   return response[0];
 };
 
-// Video.hook("beforeUpdate", (video, options) => {
-//   return video.totalViews++;
-// });
-
-// Article.belongsTo(User, { as: "author" });
-
 module.exports = Video;
-// const videoDetails = {
-//     name: 'titleSetBYYou',
-//     brand: '',
-//     storageReference: '',
-//     primaryVideoCategory: '',
-//     keywords: [],
-//     publishedDate: Date.now(),
-//     totalViews: 0,
-//     viewHistory: []
-//   };

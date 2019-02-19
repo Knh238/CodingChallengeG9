@@ -38,7 +38,6 @@ export default class SignUpForm extends Component {
       currHoldings: []
     };
 
-    // sign up the user
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, pass)
