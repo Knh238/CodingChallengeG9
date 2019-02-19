@@ -5,17 +5,6 @@ const app = require('../index');
 const Video = db.model('video');
 const View = db.model('view');
 
-// const videoDetails = {
-//     name: 'titleSetBYYou',
-//     brand: 'TheDoDo',
-//     storageReference: 'https://www.youtube.com/watch?v=tQ9cz19YAxE&t=136s',
-//     primaryVideoCategory: 'dance',
-//     keywords: [],
-//     publishedDate: Date.now(),
-//     totalViews: 0,
-//     viewHistory: []
-//   };
-
 describe('Video models', () => {
   describe('/videos/', () => {
     const newVideo = {
@@ -28,12 +17,6 @@ describe('Video models', () => {
       totalViews: 0,
       viewHistory: []
     };
-
-    // beforeEach(() => {
-    //   return Video.create({
-    //     newVideo
-    //   });
-    // });
 
     describe('attributes definition', () => {
       it('includes `name` and `brand` fields', async () => {
@@ -98,7 +81,7 @@ describe('View models', () => {
         dateViewed: Date.now(),
         user: 'anonymous'
       });
-      //   console.log('saved view is ....', savedView.dataValues);
+
       expect(savedView.dataValues.videoId).to.equal(1);
       expect(savedView.dataValues.brand).to.equal('NowThis');
     });

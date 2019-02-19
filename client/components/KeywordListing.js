@@ -17,7 +17,6 @@ export default class KeywordListing extends React.Component {
   handleSubmit() {
     const input = this.state.title;
 
-    console.log('text', input);
     this.setState({ title: '' });
   }
   render() {

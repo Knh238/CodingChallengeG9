@@ -9,7 +9,6 @@ router.post('/', async (req, res, next) => {
   try {
     const videoInfo = req.body;
     videoInfo.publishedDate = Date.now();
-    console.log('video is in here', req.body);
 
     const newVideo = await Video.create(videoInfo);
 
@@ -58,7 +57,7 @@ router.get('/:videoId/report', async (req, res, next) => {
       published: video.publishedDate,
       count: viewHistory.length
     };
-    console.log('view history in get', responseObject);
+
     res.status(200).json(responseObject);
   } catch (err) {
     next(err);
@@ -71,7 +70,7 @@ router.get('/:videoId/views', async (req, res, next) => {
     const viewHistory = await View.findAll({
       where: { videoId: req.params.videoId }
     });
-    console.log('view history in get', viewHistory);
+
     res.status(200).json({ views: viewHistory });
   } catch (err) {
     next(err);
@@ -82,7 +81,7 @@ router.get('/:videoId/viewsTotal', async (req, res, next) => {
   try {
     const videoId = req.params.videoId;
     const viewHistory = await View.findAll({ where: { videoId: videoId } });
-    console.log('view history in get', viewHistory.length);
+
     //returns 10
     res.status(200).json({ viewsTotal: viewHistory.length });
   } catch (err) {
@@ -95,9 +94,7 @@ router.post('/view/', async (req, res, next) => {
     const videoInfo = req.body;
     videoInfo.dateViewed = Date.now();
     const videoId = req.body.videoId;
-    console.log('video is in here', req.body);
     const newView = await View.create(videoInfo);
-
     res.status(201).json({ newView: newView });
   } catch (err) {
     next(err);
