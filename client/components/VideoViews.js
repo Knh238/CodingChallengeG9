@@ -10,11 +10,15 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import firebase from '../firebase';
+import { connect } from 'react-redux';
+import { getViewReport } from '../store/videos';
+import ReactPlayer from 'react-player';
+import moment from 'moment';
 
-export default class VideoViews extends React.Component {
+class VideoViews extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: '', brand: '', user: '' };
+    this.state = { id: '', viewReport: {} };
   }
   componentDidMount() {
     const self = this;
@@ -27,13 +31,91 @@ export default class VideoViews extends React.Component {
     });
   }
   handleSubmit() {
-    const input = this.state.title;
-
-    console.log('text', input);
-    this.setState({ title: '' });
+    const id = this.state.id;
+    const self = this;
+    try {
+      let videoViews = {};
+      const ref = firebase
+        .database()
+        .ref('/videos')
+        .once('value')
+        .then(function(snapshot) {
+          var videos = snapshot.val();
+          for (let key in videos) {
+            if (key === id) {
+              const published = moment(videos[key].publishedDate).format(
+                'MMMM DoYYYY, h:mm:ss a'
+              );
+              videoViews.brand = videos[key].brand;
+              videoViews.name = videos[key].name;
+              videoViews.Published = published;
+              videoViews.totalViews = videos[key].totalViews;
+              videoViews.url = videos[key].storageRef;
+            }
+          }
+          self.setState({ viewReport: videoViews });
+        });
+    } catch (err) {
+      console.log('not setting stuff');
+      console.error(err);
+    }
+    this.setState({ id: '' });
   }
+  returnReport() {
+    return (
+      <Card
+        style={{
+          float: 'none',
+          marginLeft: 'auto',
+          marginRight: 'auto'
+        }}
+      >
+        <CardContent align="center">
+          <Typography
+            variant="h4"
+            style={{ fontFamily: 'Signika' }}
+            align="center"
+          >
+            {this.state.viewReport.name}
+          </Typography>
+        </CardContent>
+        <CardContent align="center">
+          <Typography
+            variant="h4"
+            style={{ fontFamily: 'Signika' }}
+            align="center"
+          >
+            {this.state.viewReport.brand}
+          </Typography>
+        </CardContent>
+        <CardContent align="center">
+          <ReactPlayer url={this.state.viewReport.url} controls={true} />
+        </CardContent>
+        <CardContent align="center">
+          <Typography
+            variant="h4"
+            style={{ fontFamily: 'Signika' }}
+            align="center"
+          >
+            published: {this.state.viewReport.Published}
+          </Typography>
+        </CardContent>
+        <CardContent align="center">
+          <Typography
+            variant="h4"
+            style={{ fontFamily: 'Signika' }}
+            align="center"
+          >
+            total views: {this.state.viewReport.totalViews}
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+
   render() {
     const loggedIn = this.state.user;
+
     return loggedIn ? (
       <Card
         style={{
@@ -52,7 +134,7 @@ export default class VideoViews extends React.Component {
         <CardContent align="center">
           <CardMedia
             component="img"
-            style={{ height: '30%', width: '20%' }}
+            style={{ height: '20%', width: '20%' }}
             image="https://cdn130.picsart.com/287703920011201.jpg?c480x480"
             title="home"
           />
@@ -64,8 +146,8 @@ export default class VideoViews extends React.Component {
               root: styles.inputRoot,
               input: styles.inputInput
             }}
-            value={this.state.title}
-            onChange={event => this.setState({ title: event.target.value })}
+            value={this.state.id}
+            onChange={event => this.setState({ id: event.target.value })}
             margin="normal"
             variant="outlined"
             label="video id:"
@@ -81,6 +163,7 @@ export default class VideoViews extends React.Component {
             Submit
           </Button>
         </CardContent>
+        {this.state.viewReport.name ? this.returnReport() : null}
       </Card>
     ) : (
       <Card
@@ -112,3 +195,19 @@ const styles = {
     objectFit: 'cover'
   }
 };
+const mapStateToProps = state => {
+  return {
+    ...state,
+    videos: state.videoList,
+    views: state.views
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getViewReport: id => {
+      dispatch(getViewReport(id));
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(VideoViews);

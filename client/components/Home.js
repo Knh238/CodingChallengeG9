@@ -14,10 +14,40 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
+import { connect } from 'react-redux';
+import { getAllVideos } from '../store/videos';
 
 import { CardHeader } from '@material-ui/core';
-
-export default class Home extends React.Component {
+class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { videoList: [] };
+  }
+  // componentDidMount() {
+  //   this.props.getAllVideos();
+  // const allVideos = [];
+  // firebase.auth().onAuthStateChanged(function(user) {
+  //   if (user) {
+  //     const ref = firebase.database().ref('videos');
+  //     ref.on('value', function(snapshot) {
+  //       const videos = snapshot.val();
+  //       for (let key in videos) {
+  //         let singleVideo = {
+  //           key: key,
+  //           brand: videos[key].brand,
+  //           name: videos[key].name,
+  //           url: videos[key].storageRef,
+  //           views: videos[key].totalViews
+  //         };
+  //         allVideos.push(singleVideo);
+  //       }
+  //     });
+  //   }
+  // });
+  // // console.log('this stuff all videos before setting state', allVideos);
+  // this.setState({ videoList: allVideos });
+  // console.log('this videos list is ', this.state.videosList);
+  // }
   render() {
     return (
       <Card
@@ -96,3 +126,19 @@ const styles = {
     objectFit: 'cover'
   }
 };
+const mapStateToProps = state => {
+  return {
+    ...state,
+    videoList: state.videoList,
+    views: state.views
+  };
+};
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getAllVideos: () => {
+//       dispatch(getAllVideos());
+//     }
+//   };
+// };
+export default connect(mapStateToProps, null)(Home);

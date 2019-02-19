@@ -46,7 +46,7 @@ export default class SignUpForm extends Component {
         console.error(error);
         window.alert(error);
       });
-    //add user to db
+
     firebase.auth().onAuthStateChanged(function(user) {
       let n = 0;
       if (user && n === 0) {

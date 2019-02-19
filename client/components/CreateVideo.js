@@ -11,7 +11,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
+import { connect } from 'react-redux';
 import { addNewVideo } from '../store/videos';
+
 import firebase from '../firebase';
 // const firebaseDB = firebase.database();
 
@@ -33,7 +35,7 @@ const brands = [
     label: 'Now This'
   }
 ];
-export default class CreateVideo extends React.Component {
+class CreateVideo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -303,3 +305,22 @@ const styles = theme => ({
     width: 200
   }
 });
+
+const mapStateToProps = state => {
+  return {
+    ...state,
+    videos: state.videoList,
+    views: state.views
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNewVideo: (name, brand, storageReference, primaryVideoCategory) => {
+      dispatch(
+        addNewVideo(name, brand, storageReference, primaryVideoCategory)
+      );
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CreateVideo);

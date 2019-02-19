@@ -11,57 +11,62 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import { connect } from 'react-redux';
+import { addNewView } from '../store/videos';
 import firebase from '../firebase';
 
-//gonna need to get all the views
-//then gonna need to map through to display below
-//then gonna need to add a play or watch this video button
-//that button will add a view
-//pressing view might just open it in another window
-
-export default class TrackVideo extends React.Component {
+class TrackVideo extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { videoId: '', name: '', brand: '', allVideos: [] };
+    this.state = {
+      user: '',
+      videoId: '',
+      name: '',
+      brand: '',
+      videoList: []
+    };
   }
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        const allVideos = [];
-        const ref = firebase.database().ref('videos');
-        ref.on('value', function(snapshot) {
-          const videos = snapshot.val();
+    const allVideos = [];
+    const self = this;
 
-          allVideos.push(videos);
-        });
-      }
-    });
+    const ref = firebase
+      .database()
+      .ref('/videos')
+      .once('value')
+      .then(function(snapshot) {
+        var videos = snapshot.val();
+        //event listener Style:
+        // firebase.auth().onAuthStateChanged(function(user) {
+        //   if (user) {
+        //     const ref = firebase.database().ref('videos');
+        //     ref.on('value', function(snapshot) {
+        //       const videos = snapshot.val();
+        for (let key in videos) {
+          let singleVideo = {
+            key: key,
+            brand: videos[key].brand,
+            name: videos[key].name,
+            url: videos[key].storageRef,
+            totalViews: videos[key].totalViews
+          };
+          allVideos.push(singleVideo);
+        }
+        self.setState({ videoList: allVideos, user: 'kristin' });
+      });
   }
-  addView() {
-    //user: Kristin
-    console.log('miss vanjie!');
-    // this.setState({ title: '' });
+
+  addView(videoId, brand, views) {
+    const platform = 'app';
+    const user = this.state.user;
+    const updatedViews = views + 1;
+
+    this.props.addNewView(videoId, brand, platform, user, updatedViews);
   }
-  // listAllVideos() {
-  //   const allVideos= this.state.allVideos
-  //  allVideos.map(vid => (
-  //    <Card>
-  //         <CardContent align="center">
-  //           <ReactPlayer
-  //             url="https://www.youtube.com/watch?v=2XID_W4neJo"
-  //             controls={true}
-  //             onStart={() => this.addView()}
-  //           />
-  //         </CardContent>
-  //         <CardContent align="center">
-  //         <Typography variant="h4" style={{ fontFamily: 'Signika', color: '#ef9a9a' }}>
-  //         name: vid.name: brand: vid.brand
-  //         </Typography>
-  //         </CardContent>
-  //         </Card>)
-  // }
 
   render() {
+    const videoList = this.state.videoList.length;
+
     return (
       <Paper style={{ height: 500 }}>
         <Typography
@@ -72,135 +77,57 @@ export default class TrackVideo extends React.Component {
           Watch something
         </Typography>
 
-        <Card
-          style={{
-            float: 'none',
-            marginLeft: 'auto',
-            marginRight: 'auto'
-          }}
-        >
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://youtu.be/kHUz0Z_xFXw"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, vanjie, brand: NowThis
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=M7nCOJHRcN8"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name: yanis marshall "If", brand:NowThis
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=1OadSg3Qu58&list=RD1OadSg3Qu58&start_radio=1"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name: Yanis Marshall "Irreplacable",
-              brand: NowThis
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=9rkVTfEGK8Q"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name: What To Get a Fox for Christmas,
-              brand: TheDoDo
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=2XID_W4neJo"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name:Maru Boxes, brand: TheDoDo
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=SRsAhZLCPuU"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name:Swimming with the pigs, brand:
-              Thrillist
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent align="center">
-            <ReactPlayer
-              url="https://www.youtube.com/watch?v=e-7UbU45a1U"
-              controls={true}
-              onStart={() => this.addView()}
-            />
-          </CardContent>
-          <CardContent align="center">
-            <Typography
-              variant="h4"
-              style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
-            >
-              video details: videoId, name: Plizzant Earth with Snoop, brand:
-              Seeker
-            </Typography>
-          </CardContent>
-        </Card>
+        {videoList >= 1 ? (
+          this.state.videoList.map(video => {
+            return (
+              <Card key={video.key}>
+                <CardContent key={video.key} align="center">
+                  <ReactPlayer
+                    url={video.url}
+                    controls={true}
+                    onStart={() =>
+                      this.addView(video.key, video.brand, video.totalViews)
+                    }
+                  />
+                </CardContent>
+                <CardContent align="center">
+                  <Typography
+                    variant="h3"
+                    style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
+                  >
+                    {video.name}
+                  </Typography>
+                </CardContent>
+                <CardContent align="center">
+                  <Typography
+                    variant="h4"
+                    style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
+                  >
+                    {video.brand}
+                  </Typography>
+                </CardContent>
+              </Card>
+            );
+          })
+        ) : (
+          <Card>
+            <CardContent align="center">
+              <ReactPlayer
+                url="https://www.youtube.com/watch?v=M7nCOJHRcN8"
+                controls={true}
+                onStart={() => this.addView()}
+              />
+            </CardContent>
+            <CardContent align="center">
+              <Typography
+                variant="h4"
+                style={{ fontFamily: 'Signika', color: '#ef9a9a' }}
+              >
+                name: brand:
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
       </Paper>
     );
   }
@@ -217,3 +144,20 @@ const styles = {
     objectFit: 'cover'
   }
 };
+
+const mapStateToProps = state => {
+  return {
+    ...state,
+    videos: state.videoList,
+    views: state.views
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addNewView: (videoId, brand, platform, user, updatedViews) => {
+      dispatch(addNewView(videoId, brand, platform, user, updatedViews));
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(TrackVideo);

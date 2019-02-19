@@ -21,10 +21,21 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from '@material-ui/icons/Search';
 import HistoryIcon from '@material-ui/icons/History';
 import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
+import { connect } from 'react-redux';
+import { getAllVideos } from '../store/videos';
 
 import { CardHeader } from '@material-ui/core';
 
-export default class Navbar extends React.Component {
+class Navbar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { videoList: [] };
+    // this.listAllVideos = this.listAllVideos.bind(this);
+  }
+  async componentDidMount() {
+    // await this.props.getAllVideos();
+    await this.props.getAllVideos();
+  }
   render() {
     return (
       <AppBar position="fixed" style={{ background: '#26C6DA' }}>
@@ -104,3 +115,19 @@ const styles = {
     objectFit: 'cover'
   }
 };
+const mapStateToProps = state => {
+  return {
+    ...state,
+    videoList: state.videoList,
+    views: state.views
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllVideos: () => {
+      dispatch(getAllVideos());
+    }
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

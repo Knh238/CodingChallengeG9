@@ -1,5 +1,3 @@
-import axios from 'axios';
-// import history from '../history';
 import firebase from '../firebase';
 
 const VIDEO_ADDED = 'VIDEO_ADDED';
@@ -21,13 +19,13 @@ const gotVideo = video => ({
   type: GOT_VIDEO,
   video
 });
-const gotAllVideos = video => ({
+const gotAllVideos = videoList => ({
   type: GOT_ALL_VIDEOS,
-  video
+  videoList
 });
-const gotViewReport = video => ({
+const gotViewReport = views => ({
   type: GOT_VIEW_REPORT,
-  video
+  views
 });
 const gotKeytermList = list => ({
   type: GOT_KEYTERM_LIST,
@@ -79,26 +77,63 @@ export const getVideo = id => {
 //   };
 // };
 /* firebase*/
+// export const getAllVideos = () => {
+//   return async dispatch => {
+//     try {
+//       const allVideos = [];
+//       // firebase.auth().onAuthStateChanged(function(user) {
+//       //   if (user) {
+//       const ref = firebase.database().ref('videos');
+//       ref.on('value', function(snapshot) {
+//         const videos = snapshot.val();
+//         for (let key in videos) {
+//           let singleVideo = {
+//             key: key,
+//             brand: videos[key].brand,
+//             name: videos[key].name,
+//             url: videos[key].storageRef,
+//             views: videos[key].totalViews
+//           };
+
+//           allVideos.push(singleVideo);
+//         }
+//       });
+//       // }
+//       // });
+
+//       console.log('in the action creator all videos', allVideos);
+//       dispatch(gotAllVideos(allVideos));
+//     } catch (err) {
+//       console.log('not setting stuff');
+//       console.error(err);
+//     }
+//   };
+// };
 export const getAllVideos = () => {
   return async dispatch => {
     try {
       const allVideos = [];
-      firebase.auth().onAuthStateChanged(function(user) {
-        if (user) {
-          const allVideos = [];
-          const ref = firebase.database().ref('videos');
-          ref.on('value', function(snapshot) {
-            const videos = snapshot.val();
 
-            allVideos.push(videos);
-          });
-        }
-      });
+      const ref = await firebase
+        .database()
+        .ref('/videos')
+        .once('value')
+        .then(function(snapshot) {
+          var videos = snapshot.val();
+          for (let key in videos) {
+            let singleVideo = {
+              key: key,
+              brand: videos[key].brand,
+              name: videos[key].name,
+              url: videos[key].storageRef,
+              views: videos[key].totalViews
+            };
+            allVideos.push(singleVideo);
+          }
+        });
 
-      // const allVideos = await firebase
-      // .database()
-      // .ref('videos')
-      dispatch(gotAllVideos(allVideos));
+      const videoList = allVideos;
+      dispatch(gotAllVideos(videoList));
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
@@ -158,7 +193,7 @@ export const addNewVideo = (name, brand, uri, category) => {
 };
 
 /* firebase*/
-export const addNewView = (videoId, brand, platform, user) => {
+export const addNewView = (videoId, brand, platform, user, viewCount) => {
   return async dispatch => {
     try {
       const viewDetails = {
@@ -168,24 +203,25 @@ export const addNewView = (videoId, brand, platform, user) => {
         dateViewed: Date.now(),
         user: user
       };
+      console.log('view count in action ', viewCount);
       const newKey = await firebase
         .database()
         .ref('views')
         .push().key;
-      const video = await firebase
+      const view = await firebase
         .database()
         .ref('views')
         .child(newKey)
         .set(viewDetails);
-      dispatch(videoAdded(video));
+      firebase
+        .database()
+        .ref('videos/' + videoId)
+        .update({ totalViews: `${viewCount}` });
+      dispatch(videoAdded(view));
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
-      //ownProps.history.push(`/oops`);
     }
-    //return the new view
-    //callupdate videoviews
-    //pass ti the video id and new view
   };
 };
 
@@ -205,16 +241,60 @@ export const addNewView = (videoId, brand, platform, user) => {
 //   };
 // };
 
+export const getVideoViews = id => {
+  return async dispatch => {
+    try {
+      let videoViews = [];
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          const ref = firebase.database().ref('views');
+          ref.on('value', function(snapshot) {
+            const allViews = snapshot.val();
+            for (let key in allViews) {
+              if (allViews[key].videoId === id) {
+                let singleView = {
+                  key: key,
+                  brand: allViews[key].brand,
+                  name: allViews[key].name,
+                  url: allViews[key].storageRef,
+                  totalViews: allViews[key].totalViews
+                };
+                videoViews.push(singleView);
+              }
+            }
+          });
+        }
+      });
+
+      dispatch(gotViewReport(videoViews));
+    } catch (err) {
+      console.log('not setting stuff');
+      console.error(err);
+    }
+  };
+};
 export const getViewReport = id => {
   return async dispatch => {
     try {
-      let allViews = [];
-      const ref = await firebase.database().ref('views' + id);
-      ref.on('value', function(snapshot) {
-        const views = snapshot.val();
-        allViews.push(views);
+      let videoViews = [];
+      firebase.auth().onAuthStateChanged(function(user) {
+        if (user) {
+          const ref = firebase.database().ref('videos' + id);
+          ref.on('value', function(snapshot) {
+            const video = snapshot.val();
+            for (let key in video) {
+              let viewInfo = {
+                brand: video[key].brand,
+                name: video[key].name,
+                publishedDate: video[key].storageRef,
+                totalViews: video[key].totalViews
+              };
+              videoViews.push(viewInfo);
+            }
+          });
+        }
       });
-      dispatch(gotViewReport(allViews));
+      dispatch(gotViewReport(videoViews));
     } catch (err) {
       console.log('not setting stuff');
       console.error(err);
@@ -245,7 +325,7 @@ const initialState = {
 const videosReducer = (state = initialState, action) => {
   switch (action.type) {
     case VIDEO_ADDED:
-      return { ...state, stockList: action.video };
+      return { ...state, videoList: action.video };
     case VIEW_ADDED:
       return { ...state, stockList: action.video };
     case GOT_VIDEO:
@@ -256,17 +336,17 @@ const videosReducer = (state = initialState, action) => {
     case GOT_VIEW_REPORT:
       return {
         ...state,
-        currentVideo: [...state.currentVideo, action.video]
+        views: [...state.views, action.views]
       };
     case GOT_KEYTERM_LIST:
       return {
         ...state,
-        currentVideoList: [...state.currentVideo, action.video]
+        videoList: [...state.currentVideo, action.video]
       };
     case GOT_ALL_VIDEOS:
       return {
         ...state,
-        currentVideoList: [...state.currentVideo, action.video]
+        videoList: action.videoList
       };
 
     default:
